@@ -3,9 +3,16 @@
 <head>
     <title>Snake by STih07</title>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <canvas id="gamezone">Whoops!</canvas>
+    <div title="1 block = 20px">
+        <label for="inputGameSize">Input game size</label>
+        <input type="number" id="inputGameSize">
+        <button class="btn btn-rounded" onclick="changeGameSize()">Submit!</button>
+    </div>
     <script src="index.js"></script>
 </body>
 </html>
