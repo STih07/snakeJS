@@ -18,7 +18,7 @@ let inputBlockSize = document.getElementById("inputBlockSize");
 
 //functions to change game
 var changeGameSize = () => {
-    let size = inputGameSize.value;
+    let size = +inputGameSize.value;
     if(size <= 60 && size > 5) {
         canvas.width  = size * block;
         canvas.height = size * block;
@@ -36,13 +36,13 @@ var changeGameSize = () => {
 
 var changeBlockSize = () => {
     let blockSize = +inputBlockSize.value;
-    if(blockSize <= 20 && blockSize > 1) {
+    if(blockSize <= 20 && blockSize > 3) {
         window.block = blockSize;
     } else {
         if(blockSize > 20) {
             window.block = 20;
         } else {
-            window.block = 1;
+            window.block = 3;
         }
     }
     changeGameSize();
@@ -61,3 +61,7 @@ var canvasGrid = () => {
     }
 };
 
+
+var STih07 = new Snake("stih07", "rgb(255, 0, 0)");
+STih07.start(canvas, block);
+console.log(STih07);

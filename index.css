@@ -3,3 +3,9 @@ canvas {
     margin-top:  20px;
     border: 1px solid black;
 }
+
+#GameProperties {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+}

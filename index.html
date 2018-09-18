@@ -8,12 +8,19 @@
 </head>
 <body>
     <canvas id="gamezone">Whoops!</canvas>
-        <label for="inputGameSize">Input game size</label>
-        <input type="number" id="inputGameSize">
-        <button class="btn btn-rounded" onclick="changeGameSize()">Submit!</button>
-        <label for="inputBlockSize">Input block size</label>
-        <input type="number" id="inputBlockSize">
-        <button class="btn btn-rounded" onclick="changeBlockSize()">Submit!</button>
+    <div id="GameProperties">
+        <div>
+            <label for="inputGameSize">Input game size</label>
+            <input type="number" id="inputGameSize">
+            <button class="btn btn-rounded" onclick="changeGameSize()">Submit!</button>
+        </div>
+        <div>
+            <label for="inputBlockSize">Input block size</label>
+            <input type="number" id="inputBlockSize">
+            <button class="btn btn-rounded" onclick="changeBlockSize()">Submit!</button>
+        </div>
+    </div>
+    <script src="snake.js"></script>
     <script src="index.js"></script>
 </body>
 </html>
