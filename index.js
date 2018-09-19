@@ -4,45 +4,49 @@ var context = canvas.getContext("2d");
 var body    = document.querySelector("body");
 
 
-
-//defaults
-canvas.width  = 400;
-canvas.height = 400;
-var block = 20;
-
-
 //initializing inputs for game properties
 let inputGameSize  = document.getElementById("inputGameSize");
 let inputBlockSize = document.getElementById("inputBlockSize");
+
+
+//defaults
+canvas.width     = 400;
+canvas.height    = 400;
+canvas.blockSize = 20;
+canvas.size      = canvas.blockSize * 30;
+inputGameSize.value  = 30;
+inputBlockSize.value = canvas.blockSize;
+
 
 
 //functions to change game
 var changeGameSize = () => {
     let size = +inputGameSize.value;
     if(size <= 60 && size > 5) {
-        canvas.width  = size * block;
-        canvas.height = size * block;
+        canvas.sizeInBlocks = size;
     } else {
         if(size > 60) {
-            canvas.width  = 60 * block;
-            canvas.height = 60 * block;
+            canvas.sizeInBlocks = 60;
         } else {
-            canvas.width  =  5 * block;
-            canvas.height =  5 * block;
+            canvas.sizeInBlocks = 5;
         }
     }
+
+    canvas.size   =  canvas.sizeInBlocks * canvas.blockSize;
+    canvas.width  =  canvas.size;
+    canvas.height =  canvas.size;
     canvasGrid();
 }
 
 var changeBlockSize = () => {
     let blockSize = +inputBlockSize.value;
     if(blockSize <= 20 && blockSize > 3) {
-        window.block = blockSize;
+        canvas.blockSize = blockSize;
     } else {
         if(blockSize > 20) {
-            window.block = 20;
+            canvas.blockSize = 20;
         } else {
-            window.block = 3;
+            canvas.blockSize = 3;
         }
     }
     changeGameSize();
@@ -52,16 +56,11 @@ var changeBlockSize = () => {
 //canvas grid render
 var canvasGrid = () => {
     context.fillStyle = "rgb(0, 0, 0)";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillRect(0, 0, canvas.size, canvas.size);
     context.fillStyle = "rgb(255, 255, 255)";
-    for(var i=0; i < canvas.width; i+=block) {
-        for(var j=0; j < canvas.height; j+=block) {
-            context.fillRect(i, j, block-1, block-1);
+    for(var i=0; i < canvas.size; i+=canvas.blockSize) {
+        for(var j=0; j < canvas.size; j+=canvas.blockSize) {
+            context.fillRect(i, j, canvas.blockSize-1, canvas.blockSize-1);
         }
     }
 };
-
-
-var STih07 = new Snake("stih07", "rgb(255, 0, 0)");
-STih07.start(canvas, block);
-console.log(STih07);
