@@ -16,7 +16,7 @@ var state = {
 class Snake {
     constructor(name, color, canvas, keys) {
         this.block  = canvas.blockSize;
-        this.changeDirection = keys;
+        this.directionKeys = keys;
         this.direction = "left";
         this.canvas = canvas;
         this.color  = color;
@@ -25,26 +25,28 @@ class Snake {
         this.tail   = 0;
         this.head   = 0;
     }
-    handleKeys() {
-        var body = document.querySelector("body");
-    }
+
     changeDirection(key) {
-        if(key === this.changeDirection[0]) {
-            if(this.direction !== "right") {
-                this.direction = "left";
+        if(this.directionKeys.indexOf(key) != -1) {
+            if(key === this.directionKeys[0]) {
+                if(this.direction !== "right") {
+                    this.direction = "left";
+                }
+            }else if(key === this.directionKeys[1]) {
+                if(this.direction !== "down") {
+                    this.direction = "up";
+                }
+            }else if(key === this.directionKeys[2]) {
+                if(this.direction !== "up") {
+                    this.direction = "down";
+                }
+            }else if(key === this.directionKeys[3]) {
+                if(this.direction !== "left") {
+                    this.direction = "right";
+                }
             }
-        }else if(key === this.changeDirection[1]) {
-            if(this.direction !== "down") {
-                this.direction = "up";
-            }
-        }else if(key === this.changeDirection[2]) {
-            if(this.direction !== "up") {
-                this.direction = "down";
-            }
-        }else if(key === this.changeDirection[3]) {
-            if(this.direction !== "left") {
-                this.direction = "right";
-            }
+        } else {
+            console.log(this.directionKeys[key]);
         }
     };
 
@@ -52,25 +54,31 @@ class Snake {
         var direction_coords = {
             "left" : [-1, 0],
             "right": [ 1, 0],
-            "up"   : [ 0, 1],
-            "down" : [-1, 0]
+            "up"   : [ 0,-1],
+            "down" : [ 0, 1]
         }
         this.erase();
         this.append(direction_coords[this.direction]);
+        // if(this.sBody[this.head][0] == 0 ||
+        //     this.sBody[this.head][0] == this.canvas.sizeInBlocks ||
+        //     this.sBody[this.head][1] == 0 ||
+        //     this.sBody[this.head][1] == this.canvas.sizeInBlocks ) {
+        //     console.log(this);
+        //     delete this;
+        //     console.log(this);
+        // }
         this.pop();
         this.render();
     };
 
     render() {
         for(var i in this.sBody) {
-            console.log(this.sBody[i]);
             this.sBody[i].render();
         }
     };
 
     erase() {
         for(var i in this.sBody) {
-            console.log(this.sBody[i]);
             this.sBody[i].erase();
         }
     };
@@ -88,9 +96,15 @@ class Snake {
     start() {
         this.sBody[0] = new Block(this.color, this.name, this.canvas, getRandomBlock(this.canvas)); //starterPoint
         this.append([1, 0]);
+        this.append([1, 0]);
+        this.append([1, 0]);
+        this.append([1, 0]);
+        this.append([1, 0]);
+        this.append([1, 0]);
+        snakes.push(this);
         setInterval(() => {
             this.move();
-        }, 1000);
+        }, 50);
     };
 }
 

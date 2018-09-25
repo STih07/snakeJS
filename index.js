@@ -8,6 +8,12 @@ var body    = document.querySelector("body");
 let inputGameSize  = document.getElementById("inputGameSize");
 let inputBlockSize = document.getElementById("inputBlockSize");
 
+var snakes = [];
+body.addEventListener("keypress", function(keypress) {
+    snakes.forEach( (snake) => {
+        snake.changeDirection(keypress.key);
+    });
+});
 
 //defaults
 canvas.width     = 400;
@@ -16,7 +22,6 @@ canvas.blockSize = 20;
 canvas.size      = canvas.blockSize * 30;
 inputGameSize.value  = 30;
 inputBlockSize.value = canvas.blockSize;
-// body.addEventListener("keypress", )
 
 
 //functions to change game
