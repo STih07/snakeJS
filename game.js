@@ -1,14 +1,7 @@
 changeBlockSize();
 
-var kappa = new Block("rgb(123, 123, 0)", "Apple", canvas, [7, 1]);
+var stih07 = new Snake("STih07", "rgb(125, 125, 0)", canvas, ["a", "w", "s", "d"]);
+// var zahessi = new Snake("zahessi", "#e2e2e2", canvas);
 
-var testButton = document.getElementById("test");
-testButton.addEventListener("click", function() {
-    for(var i = 0; i < 10; i++) {
-        var block = new Block("rgb(123, 123, 0)", "Apple", canvas, [7, 1]);
-        block.changeCoords();
-        block.render();
-    }
-})
-
-console.log(kappa);
+stih07.start();
+console.log(stih07);

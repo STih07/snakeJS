@@ -16,7 +16,7 @@ canvas.blockSize = 20;
 canvas.size      = canvas.blockSize * 30;
 inputGameSize.value  = 30;
 inputBlockSize.value = canvas.blockSize;
-
+// body.addEventListener("keypress", )
 
 
 //functions to change game
