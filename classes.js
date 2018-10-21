@@ -1,9 +1,20 @@
-var getRandomBlock = function (canvas) {
-    var getRandomCoord = () => {
-        return Math.round(Math.random() * canvas.sizeInBlocks);
-    };
-    return [getRandomCoord(), getRandomCoord()];
+var getRandomCoord = () => {
+        return Math.round(Math.random() * (canvas.sizeInBlocks-1));
 };
+var getRandomBlock = function (canvas) {
+    var arr_to_return = [getRandomCoord(), getRandomCoord()];
+    // // if(canvas.blocks.arr_to_return !== undefined) {
+    //     console.warn("Hey! Catch!", canvas.blocks, arr_to_return, canvas.blocks[arr_to_return.toString()]);
+    //     // return getRandomBlock(canvas);
+    // // };
+    return arr_to_return;
+};
+var getRandomColor = () => {
+    var R = Math.round(Math.random() * (255));
+    var G = Math.round(Math.random() * (255));
+    var B = Math.round(Math.random() * (255));
+    return 'rgba('+R+', '+R+', ' +R+', 0.9)';
+}
 
 // var renderBlock = function ()
 var state = {
@@ -12,6 +23,13 @@ var state = {
     up    :() => { changeCoords(  0, -blocksize) },
     down  :() => { changeCoords(  0,  blocksize) }
 };
+
+var direction_coords = {
+    "left" : [-1, 0],
+    "right": [ 1, 0],
+    "up"   : [ 0,-1],
+    "down" : [ 0, 1]
+}
 
 class Snake {
     constructor(name, color, canvas, keys) {
@@ -50,35 +68,61 @@ class Snake {
         }
     };
 
+    checkPosition() {
+        let currentPositionBlock = canvas.blocks[this.sBody[this.head].position];
+        console.log(canvas.blocks);
+        if(currentPositionBlock !== undefined) {
+            switch (currentPositionBlock.type) {
+                case "Food":
+                    currentPositionBlock.erase();
+                    this.append(direction_coords[this.direction]);
+                    // currentPositionBlock.changeCoords();
+                    // currentPositionBlock.render();
+                    break;
+                case "Blocker":
+                    this.respawn();
+                    break;
+                case "Portal":
+                    this.sBody[this.head].position = currentPositionBlock.redirect;
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+
     move() {
-        var direction_coords = {
-            "left" : [-1, 0],
-            "right": [ 1, 0],
-            "up"   : [ 0,-1],
-            "down" : [ 0, 1]
-        }
         this.erase();
         this.append(direction_coords[this.direction]);
-        // if(this.sBody[this.head][0] == 0 ||
-        //     this.sBody[this.head][0] == this.canvas.sizeInBlocks ||
-        //     this.sBody[this.head][1] == 0 ||
-        //     this.sBody[this.head][1] == this.canvas.sizeInBlocks ) {
-        //     console.log(this);
-        //     delete this;
-        //     console.log(this);
-        // }
         this.pop();
+        this.checkPosition();
         this.render();
     };
 
     render() {
-        for(var i in this.sBody) {
+        for(var i = this.head; i >= this.tail; i--) {
             this.sBody[i].render();
         }
     };
+    
+
+    clear() {
+        this.sBody = {};
+        this.sBody[0] = new Block(this.color, "Blocker", this.canvas, getRandomBlock(this.canvas));
+        this.tail = 0;
+        this.head = 0;
+    }
+
+    respawn() {
+        clearInterval(this.interval);
+        this.clear();
+        this.interval = setInterval(() => {
+                this.move();
+        }, 60);
+    }
 
     erase() {
-        for(var i in this.sBody) {
+        for(var i = this.head; i >= this.tail; i--) {
             this.sBody[i].erase();
         }
     };
@@ -90,21 +134,19 @@ class Snake {
 
     append([coord1, coord2]) {
         this.head++;
-        this.sBody[this.head] = new Block(this.color, this.name, this.canvas, [this.sBody[this.head-1].position[0]+coord1, this.sBody[this.head-1].position[1]+coord2]);
+        this.sBody[this.head] = new Block(this.color, "Blocker", this.canvas, [this.sBody[this.head-1].position[0]+coord1, this.sBody[this.head-1].position[1]+coord2]);
     };
     
     start() {
-        this.sBody[0] = new Block(this.color, this.name, this.canvas, getRandomBlock(this.canvas)); //starterPoint
-        this.append([1, 0]);
-        this.append([1, 0]);
+        this.sBody[0] = new Block(this.color, "Blocker", this.canvas, getRandomBlock(this.canvas)); //starterPoint
         this.append([1, 0]);
         this.append([1, 0]);
         this.append([1, 0]);
         this.append([1, 0]);
         snakes.push(this);
-        setInterval(() => {
+        this.interval = setInterval(() => {
             this.move();
-        }, 50);
+        }, 60);
     };
 }
 
@@ -122,16 +164,35 @@ class Block {
     };
 
     erase() {
+        delete canvas.blocks[this.position];
         var context = canvas.getContext("2d");
-        context.fillStyle = "rgb(255, 255, 255)";
+        context.fillStyle = "rgb(200, 200, 255)";
         context.fillRect(this.position[0]*this.size, this.position[1]*this.size, this.size-1, this.size-1);
     };
 
     render() {
+        canvas.blocks[this.position] = this;
         var context = canvas.getContext("2d");
         context.fillStyle = this.color;
         context.fillRect(this.position[0]*this.size, this.position[1]*this.size, this.size-1, this.size-1);
     };
+}
 
+class Food extends Block {
+    constructor(color, canvas, position) {
+        super(color, "Food", canvas, position);
+    }
+}
 
+class Blocker extends Block {
+    constructor(canvas, position) {
+        super("rgb(0, 0, 0)", "Blocker", canvas, position);
+    }
+}
+
+class Portal extends Block {
+    constructor(canvas, position, redirect) {
+        super("rgb(148, 0, 150)", "Portal", canvas, position);
+        this.redirect = redirect;
+    }
 }

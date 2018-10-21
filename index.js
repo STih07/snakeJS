@@ -18,20 +18,21 @@ body.addEventListener("keypress", function(keypress) {
 //defaults
 canvas.width     = 400;
 canvas.height    = 400;
-canvas.blockSize = 20;
-canvas.size      = canvas.blockSize * 30;
-inputGameSize.value  = 30;
+canvas.blockSize = 10;
+canvas.blocks    = {};
+canvas.size      = canvas.blockSize * 50;
+inputGameSize.value  = 50;
 inputBlockSize.value = canvas.blockSize;
 
 
 //functions to change game
 var changeGameSize = () => {
     let size = +inputGameSize.value;
-    if(size <= 60 && size > 5) {
+    if(size <= 120 && size > 5) {
         canvas.sizeInBlocks = size;
     } else {
-        if(size > 60) {
-            canvas.sizeInBlocks = 60;
+        if(size > 120) {
+            canvas.sizeInBlocks = 120;
         } else {
             canvas.sizeInBlocks = 5;
         }
@@ -60,12 +61,23 @@ var changeBlockSize = () => {
 
 //canvas grid render
 var canvasGrid = () => {
-    context.fillStyle = "rgb(0, 0, 0)";
-    context.fillRect(0, 0, canvas.size, canvas.size);
     context.fillStyle = "rgb(255, 255, 255)";
-    for(var i=0; i < canvas.size; i+=canvas.blockSize) {
-        for(var j=0; j < canvas.size; j+=canvas.blockSize) {
-            context.fillRect(i, j, canvas.blockSize-1, canvas.blockSize-1);
-        }
-    }
+    context.fillRect(0, 0, canvas.size, canvas.size);
+    // context.fillStyle = "rgb(0, 0, 0)";
+    // for(var i=0; i < canvas.size; i+=canvas.blockSize) {
+    //     for(var j=0; j < canvas.size; j+=canvas.blockSize) {
+    //         context.fillRect(i, j, canvas.blockSize-1, canvas.blockSize-1);
+    //     }
+    // }
 };
+//border on the board
+var fillBorders = () => {
+    for(var i = 0; i < canvas.sizeInBlocks; i++) {
+        new Portal(canvas, [i, -1], [i, canvas.sizeInBlocks-1]).render();
+        new Portal(canvas, [-1, i], [canvas.sizeInBlocks-1, i]).render();
+    };
+    for(var i = 0; i < canvas.sizeInBlocks; i++) {
+        new Portal(canvas, [i, canvas.sizeInBlocks], [i, 0]).render();
+        new Portal(canvas, [canvas.sizeInBlocks, i], [0, i]).render();
+    }
+}
